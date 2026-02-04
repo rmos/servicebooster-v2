@@ -7,6 +7,18 @@
 /.angular/
 .angular/
 
+# OS / IDE
+.DS_Store
+.idea/
+.vscode/
+
+# Node
+node_modules/
+dist/
+tmp/
+.nx/cache/
+.nx/workspace-data/
+
 # Node modules and dependency files
 /node_modules/
 /package-lock.json
