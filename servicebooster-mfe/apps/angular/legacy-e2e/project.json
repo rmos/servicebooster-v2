@@ -1,0 +1,10 @@
+{
+  "name": "legacy-e2e",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/angular/legacy-e2e/src",
+  "tags": [],
+  "implicitDependencies": ["legacy"],
+  "// targets": "to see all targets run: nx show project legacy-e2e --web",
+  "targets": {}
+}
