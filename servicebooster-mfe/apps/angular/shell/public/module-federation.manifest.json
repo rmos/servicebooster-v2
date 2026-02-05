@@ -1,0 +1,5 @@
+{
+  "ireland": "http://localhost:4201/mf-manifest.json",
+  "portugal": "http://localhost:4202/mf-manifest.json",
+  "legacy": "http://localhost:4203/mf-manifest.json"
+}
