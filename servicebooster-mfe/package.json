@@ -2,7 +2,12 @@
   "name": "@servicebooster-mfe/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev:shell": "nx serve shell",
+    "dev:none": "concurrently -n shell \"nx serve shell\"",
+    "dev:ireland": "concurrently -n shell,ireland \"nx serve shell\" \"nx serve ireland\"",
+    "dev:all": "concurrently -n shell,ireland,portugal,legacy \"nx serve shell\" \"nx serve ireland\" \"nx serve portugal\" \"nx serve legacy\""
+  },
   "private": true,
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "~2.1.2",
@@ -35,6 +40,7 @@
     "@vitest/coverage-v8": "^4.0.0",
     "@vitest/ui": "^4.0.8",
     "angular-eslint": "^21.0.1",
+    "concurrently": "^9.2.1",
     "cypress": "^15.8.0",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
@@ -56,8 +62,8 @@
     "@angular/forms": "~21.1.0",
     "@angular/platform-browser": "~21.1.0",
     "@angular/router": "~21.1.0",
-    "rxjs": "~7.8.0",
-    "@nx/angular": "22.4.5"
+    "@nx/angular": "22.4.5",
+    "rxjs": "~7.8.0"
   },
   "engines": {
     "node": ">=22 <23"

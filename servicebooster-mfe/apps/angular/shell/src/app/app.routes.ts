@@ -8,15 +8,16 @@ function loadRemoteRoutes(remote: RemoteName) {
   return () =>
     loadRemote<any>(`${remote}/Routes`)
       .then((m) => {
-        const routes = m?.remoteRoutes;
+        const routes = m?.remoteRoutes ?? m?.routes ?? m?.default;
         if (!routes) {
-          throw new Error(`Remote ${remote} loaded but did not export remoteRoutes`);
+          throw new Error(
+            `Remote ${remote} loaded but did not export routes (remoteRoutes/routes/default)`
+          );
         }
         return routes as Route[];
       })
       .catch((err) => {
         console.error(`Failed to load remote routes: ${remote}`, err);
-
         return [
           {
             path: '',

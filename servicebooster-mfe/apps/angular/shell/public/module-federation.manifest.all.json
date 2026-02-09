@@ -1,0 +1,5 @@
+{
+    "ireland": "http://localhost:4201/remoteEntry.mjs",
+    "portugal": "http://localhost:4202/remoteEntry.mjs",
+    "legacy": "http://localhost:4203/remoteEntry.mjs"
+  }

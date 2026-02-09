@@ -35,3 +35,10 @@ npx nx serve shell        # levantar host
 npx nx serve ireland      # levantar solo un remote
 npx nx build shell        # build host
 npx nx build ireland      # build remote
+
+npx nx run-many -t serve -p shell ireland portugal legacy # levanta los 4
+npx nx run-many -t serve -p shell ireland # levanta shell y un mfe
+
+http://localhost:4200/?mf=none
+http://localhost:4200/?mf=ireland
+http://localhost:4200/?mf=all
