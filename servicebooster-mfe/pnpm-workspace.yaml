@@ -1,1 +1,4 @@
 autoInstallPeers: true
+
+patchedDependencies:
+  nx: patches/nx.patch

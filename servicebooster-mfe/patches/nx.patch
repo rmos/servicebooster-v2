@@ -1,0 +1,40 @@
+diff --git a/src/utils/spinner.js b/src/utils/spinner.js
+index f6743d3f64b541bfdabe8a5c820a6908059ad333..20f44b443bc8e753eb4284ea9ba331ede9b5fc85 100644
+--- a/src/utils/spinner.js
++++ b/src/utils/spinner.js
+@@ -3,8 +3,21 @@ var _SpinnerManager_instances, _SpinnerManager_ora, _SpinnerManager_prefix, _Spi
+ Object.defineProperty(exports, "__esModule", { value: true });
+ exports.globalSpinner = exports.SHOULD_SHOW_SPINNERS = void 0;
+ const tslib_1 = require("tslib");
+-const ora = require("ora");
+ const is_ci_1 = require("./is-ci");
++const createNoopOra = (options) => {
++  const state = { text: options?.text ?? "" };
++  const api = {
++    start: () => api,
++    stop: () => api,
++    succeed: () => api,
++    fail: () => api,
++    info: () => api,
++    warn: () => api,
++    get text() { return state.text; },
++    set text(v) { state.text = v; }
++  };
++  return api;
++};
+ exports.SHOULD_SHOW_SPINNERS = process.stdout.isTTY && !(0, is_ci_1.isCI)();
+ class SpinnerManager {
+     constructor() {
+@@ -51,11 +64,6 @@ class SpinnerManager {
+     }
+ }
+ _SpinnerManager_ora = new WeakMap(), _SpinnerManager_prefix = new WeakMap(), _SpinnerManager_instances = new WeakSet(), _SpinnerManager_createOra = function _SpinnerManager_createOra(text) {
+-    tslib_1.__classPrivateFieldSet(this, _SpinnerManager_ora, ora({
+-        text: text,
+-        prefixText: tslib_1.__classPrivateFieldGet(this, _SpinnerManager_prefix, "f"),
+-        hideCursor: false,
+-        discardStdin: false,
+-    }), "f");
++    tslib_1.__classPrivateFieldSet(this, _SpinnerManager_ora, createNoopOra({text}), "f");
+ };
+ exports.globalSpinner = new SpinnerManager();

@@ -75,3 +75,32 @@ And join the Nx community:
 - [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
 - [Our Youtube channel](https://www.youtube.com/@nxdevtools)
 - [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+
+
+1. Abrir el patch edit
+pnpm patch nx
+
+2. Editar src/utils/spinner.js en esa carpeta temporal
+A) Quita el require("ora") (o cualquier import/require de ora).
+B) Añade un “factory” no‑op y úsalo en _SpinnerManager_createOra.
+const createNoopOra = (options) => {
+  const state = { text: options?.text ?? "" };
+  const api = {
+    start: () => api,
+    stop: () => api,
+    succeed: () => api,
+    fail: () => api,
+    info: () => api,
+    warn: () => api,
+    get text() { return state.text; },
+    set text(v) { state.text = v; }
+  };
+  return api;
+};
+
+_SpinnerManager_createOra(options) {
+  tslib_1.__classPrivateFieldSet(this, _SpinnerManager_ora, createNoopOra(options), "f");
+}
+
+3. Cerrar y confirmar el patch
+pnpm patch-commit nx

@@ -1,0 +1,32 @@
+diff --git a/src/utils/spinner.js b/src/utils/spinner.js
+index 1111111..2222222 100644
+--- a/src/utils/spinner.js
++++ b/src/utils/spinner.js
+@@ -1,7 +1,16 @@
+ "use strict";
+ Object.defineProperty(exports, "__esModule", { value: true });
+ const tslib_1 = require("tslib");
+-const ora = require("ora");
++
++/**
++ * FIX: Nx 22.4.5 usa require("ora") pero ORA >=8 es ESM y en Windows lanza:
++ * ERR_REQUIRE_ESM o "ora is not a function".
++ *
++ * Solución: usar import() dinámico y extraer default.
++ */
++const ora = async (...args) => {
++  const mod = await import("ora");
++  return mod.default(...args);
++};
+ 
+ const _SpinnerManager_instance = new WeakMap();
+ const _SpinnerManager_ora = new WeakMap();
+@@ -49,7 +58,7 @@ class SpinnerManager {
+     })();
+   }
+   _SpinnerManager_createOra(options) {
+-    tslib_1.__classPrivateFieldSet(this, _SpinnerManager_ora, ora(options), "f");
++    tslib_1.__classPrivateFieldSet(this, _SpinnerManager_ora, ora(options), "f");
+   }
+   start(message) {
+     if (this.timeoutId) {
