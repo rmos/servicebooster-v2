@@ -23,7 +23,8 @@
       ],
       "legacy/Routes": [
         "apps/angular/legacy/src/app/remote-entry/entry.routes.ts"
-      ]
+      ],
+      "@shared/shared-auth": ["libs/shared/shared-auth/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

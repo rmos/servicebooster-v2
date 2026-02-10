@@ -65,7 +65,8 @@
           "buildTarget": "shell:build:production"
         },
         "development": {
-          "buildTarget": "shell:build:development"
+          "buildTarget": "shell:build:development",
+          "proxyConfig": "apps/angular/shell/proxy.conf.json"
         }
       },
       "defaultConfiguration": "development"

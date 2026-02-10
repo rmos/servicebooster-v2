@@ -42,3 +42,9 @@ npx nx run-many -t serve -p shell ireland # levanta shell y un mfe
 http://localhost:4200/?mf=none
 http://localhost:4200/?mf=ireland
 http://localhost:4200/?mf=all
+	# Sin remotes (por defecto):
+http://localhost:4200/
+	# Todos:
+http://localhost:4200/?mf=all
+	# Solo ireland:
+http://localhost:4200/?mf=ireland

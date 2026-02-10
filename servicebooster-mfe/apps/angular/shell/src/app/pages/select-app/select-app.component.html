@@ -1,0 +1,17 @@
+<h2>Selecciona aplicación</h2>
+
+<p *ngIf="!apps.length">No tienes acceso a ningún microfrontend.</p>
+
+<ul>
+  <li *ngFor="let app of apps">
+    <button (click)="open(app.route)">{{ app.title }}</button>
+  </li>
+</ul>
+
+<hr />
+
+<button (click)="auth.logout()">Cerrar sesión</button>
+
+<p style="opacity:.7; font-size: 12px">
+    Modo MF actual: {{ mfMode }}
+</p>

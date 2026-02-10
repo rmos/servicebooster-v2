@@ -1,6 +1,10 @@
-import { Route } from '@angular/router';
+import { Route, Router } from '@angular/router';
 import { NxWelcome } from './nx-welcome';
 import { loadRemote } from '@module-federation/enhanced/runtime';
+import { authGuard } from './core/auth/auth.guard';
+import { permissionGuard } from './core/auth/permission.guard';
+import { AuthFacade } from './core/auth/auth.facade';
+import { inject } from '@angular/core';
 
 type RemoteName = 'legacy' | 'portugal' | 'ireland';
 
@@ -33,28 +37,51 @@ function loadRemoteRoutes(remote: RemoteName) {
 
 export const appRoutes: Route[] = [
   {
+    path: 'login',
+    loadComponent: () => import('./pages/login/login.component').then((m) => m.LoginComponent),
+  },
+  {
+    path: 'select-app',
+    canMatch: [authGuard],
+    loadComponent: () =>
+      import('./pages/select-app/select-app.component').then((m) => m.SelectAppComponent),
+  },
+  {
+    path: 'forbidden',
+    canMatch: [authGuard],
+    loadComponent: () =>
+      import('./pages/forbidden/forbidden.component').then((m) => m.ForbiddenComponent),
+  },
+
+  {
     path: 'legacy',
+    canMatch: [permissionGuard('ACCESS-AMBAR')],
     loadChildren: loadRemoteRoutes('legacy'),
   },
   {
     path: 'portugal',
+    canMatch: [permissionGuard('ACCESS-PRE')],
     loadChildren: loadRemoteRoutes('portugal'),
   },
   {
     path: 'ireland',
+    canMatch: [permissionGuard('ACCESS-V1')],
     loadChildren: loadRemoteRoutes('ireland'),
   },
 
-  // Home del shell
+  // Home: decide segun sesion
   {
     path: '',
     pathMatch: 'full',
-    component: NxWelcome,
+    canMatch: [
+      () => {
+        const auth = inject(AuthFacade);
+        const router = inject(Router);
+        return auth.isLoggedIn() ? router.parseUrl('/select-app') : router.parseUrl('/login');
+      },
+    ],
+    component: NxWelcome, // no se usara por el redirect, pero Angular pide algo
   },
 
-  // Fallback global
-  {
-    path: '**',
-    redirectTo: '',
-  },
+  { path: '**', redirectTo: '' },
 ];

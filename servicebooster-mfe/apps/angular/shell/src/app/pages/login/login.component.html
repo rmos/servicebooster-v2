@@ -1,0 +1,17 @@
+<h2>Login</h2>
+
+<form (ngSubmit)="submit()">
+  <label>
+    Usuario
+    <input [(ngModel)]="username" name="username" autocomplete="username" />
+  </label>
+
+  <label>
+    Password
+    <input [(ngModel)]="password" name="password" type="password" autocomplete="current-password" />
+  </label>
+
+  <button type="submit" [disabled]="loading">Entrar</button>
+
+  <p *ngIf="error" style="color:red">{{ error }}</p>
+</form>
