@@ -60,7 +60,7 @@ export const appRoutes: Route[] = [
   },
   {
     path: 'portugal',
-    canMatch: [permissionGuard('ACCESS-PRE')],
+    canMatch: [permissionGuard('ACCESS-NULL')],
     loadChildren: loadRemoteRoutes('portugal'),
   },
   {

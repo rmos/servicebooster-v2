@@ -8,6 +8,6 @@ export class AuthApi {
   constructor(private http: HttpClient) {}
 
   login(username: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>('/api/auth/login', { username, password });
+    return this.http.post<LoginResponse>('/api/users/login', { id: username, psw: password });
   }
 }
