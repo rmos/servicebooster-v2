@@ -4,7 +4,7 @@
   <button
     type="button"
     *ngFor="let app of apps"
-    (click)="open(app.route)"
+    (click)="app.legacy ? openLegacy() : open(app.route)"
     style="padding:10px 12px; border-radius:10px; border:1px solid #ddd; background:#fff; cursor:pointer"
   >
     {{ app.title }}
