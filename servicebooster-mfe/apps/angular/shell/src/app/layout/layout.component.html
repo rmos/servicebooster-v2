@@ -1,0 +1,34 @@
+<div class="layout">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">SB</div>
+      <div class="title">
+        <div class="name">ServiceBooster</div>
+        <div class="subtitle">Demo MFE</div>
+      </div>
+    </div>
+
+    <div class="user" *ngIf="user as u">
+      <div class="userinfo">
+        <div class="username">{{ u.name }}</div>
+        <div class="email">{{ u.email }}</div>
+      </div>
+      <button type="button" class="btn" (click)="logout()">Salir</button>
+    </div>
+  </header>
+
+  <div class="body">
+    <aside class="sidenav">
+      <a class="navitem" [routerLink]="['/select-app']" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Selector
+      </a>
+      <a class="navitem" [routerLink]="['/ireland']" routerLinkActive="active">Ireland</a>
+      <a class="navitem" [routerLink]="['/portugal']" routerLinkActive="active">Portugal</a>
+      <a class="navitem" [routerLink]="['/legacy']" routerLinkActive="active">Legacy</a>
+    </aside>
+
+    <main class="content">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+</div>

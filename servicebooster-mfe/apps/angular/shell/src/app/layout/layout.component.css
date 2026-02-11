@@ -1,0 +1,23 @@
+.layout { min-height: 100vh; display: flex; flex-direction: column; font-family: system-ui, -apple-system, Segoe UI, Roboto; }
+.topbar { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid #e6e6e6; background: #fff; }
+.brand { display: flex; align-items: center; gap: 12px; }
+.logo { width: 36px; height: 36px; border-radius: 10px; display: grid; place-items: center; background: #111; color: #fff; font-weight: 700; }
+.title .name { font-weight: 700; }
+.title .subtitle { font-size: 12px; opacity: .6; }
+
+.user { display: flex; align-items: center; gap: 12px; }
+.userinfo { text-align: right; }
+.username { font-weight: 600; }
+.email { font-size: 12px; opacity: .6; }
+
+.btn { border: 1px solid #ddd; background: #fff; padding: 8px 12px; border-radius: 10px; cursor: pointer; }
+.btn:hover { background: #f6f6f6; }
+
+.body { flex: 1; display: flex; min-height: 0; }
+.sidenav { width: 240px; border-right: 1px solid #e6e6e6; padding: 14px; background: #fafafa; }
+.section-title { font-size: 12px; opacity: .6; margin-bottom: 10px; }
+.navitem { display: block; padding: 10px 10px; border-radius: 10px; text-decoration: none; color: inherit; margin-bottom: 6px; }
+.navitem:hover { background: #f0f0f0; }
+.navitem.active { background: #111; color: #fff; }
+.hint { margin-top: 14px; font-size: 12px; opacity: .65; }
+.content { flex: 1; padding: 18px; overflow: auto; }
