@@ -1,17 +1,48 @@
-<h2>Login</h2>
+<div class="login-page">
+  <div class="login-card">
+    <div class="brand">
+      <div class="logo">SB</div>
+      <div class="title">
+        <div class="name">ServiceBooster</div>
+        <div class="subtitle">Acceso a la plataforma</div>
+      </div>
+    </div>
 
-<form (ngSubmit)="submit()">
-  <label>
-    Usuario
-    <input [(ngModel)]="username" name="username" autocomplete="username" />
-  </label>
+    <form (ngSubmit)="submit()" class="form">
+      <div class="field">
+        <label>Usuario</label>
+        <input
+          [(ngModel)]="username"
+          name="username"
+          autocomplete="username"
+          placeholder="Usuario"
+          required
+        />
+      </div>
 
-  <label>
-    Password
-    <input [(ngModel)]="password" name="password" type="password" autocomplete="current-password" />
-  </label>
+      <div class="field">
+        <label>Password</label>
+        <input
+          [(ngModel)]="password"
+          name="password"
+          type="password"
+          autocomplete="current-password"
+          placeholder="Contraseña"
+          required
+        />
+      </div>
 
-  <button type="submit" [disabled]="loading">Entrar</button>
+      <button
+        type="submit"
+        class="btn-primary"
+        [disabled]="loading"
+      >
+        {{ loading ? 'Entrando…' : 'Entrar' }}
+      </button>
 
-  <p *ngIf="error" style="color:red">{{ error }}</p>
-</form>
+      <div class="error" *ngIf="error">
+        {{ error }}
+      </div>
+    </form>
+  </div>
+</div>

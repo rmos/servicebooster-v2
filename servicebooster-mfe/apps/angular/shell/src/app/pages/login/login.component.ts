@@ -9,6 +9,7 @@ import { AuthFacade } from '../../core/auth/auth.facade';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   username = '';
