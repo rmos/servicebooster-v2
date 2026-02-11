@@ -9,6 +9,9 @@
     "target": "http://localhost:4300",
     "secure": false,
     "changeOrigin": true,
-    "logLevel": "debug"
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/legacy": ""
+    }
   }
 }

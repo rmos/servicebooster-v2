@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "dev:legacy:static": "serve -l 4300 apps/angular/legacy-static/dist"
+    "dev:legacy:static": "serve -s -l 4300 apps/angular/legacy-static/dist",
+    "dev:all": "concurrently -n api,legacy,shell,ireland,portugal \"node backend.js\" \"pnpm dev:legacy:static\" \"nx serve shell\" \"nx serve ireland\" \"nx serve Portugal\""
   },
   "private": true,
   "devDependencies": {
@@ -38,12 +39,14 @@
     "@vitest/ui": "^4.0.8",
     "angular-eslint": "^21.0.1",
     "cypress": "^15.8.0",
+    "concurrently": "9.2.1",
     "eslint": "^9.8.0",
     "eslint-config-prettier": "^10.0.0",
     "eslint-plugin-cypress": "^3.5.0",
     "jsdom": "^27.1.0",
     "nx": "22.4.5",
     "prettier": "~3.6.2",
+    "serve": "14.2.5",
     "tslib": "^2.3.0",
     "typescript": "~5.9.2",
     "typescript-eslint": "^8.40.0",
