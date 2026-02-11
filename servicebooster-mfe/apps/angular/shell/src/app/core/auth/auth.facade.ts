@@ -3,8 +3,8 @@ import { BehaviorSubject } from 'rxjs';
 import { decodeJwt } from './jwt.util';
 import { JwtClaims, LoginResponse, SessionUser } from './auth.models';
 
-const LS_TOKEN = 'sb_token';
-const LS_CREDENTIAL = 'sb_credential';
+const LS_TOKEN = 'jwt';
+const LS_CREDENTIAL = 'credential';
 
 @Injectable({ providedIn: 'root' })
 export class AuthFacade {
@@ -35,6 +35,11 @@ export class AuthFacade {
 
   getCredential(): string | null {
     return localStorage.getItem(LS_CREDENTIAL);
+  }
+
+  getEnv(): { id: string | number } | null {
+    const raw = localStorage.getItem('sb_env');
+    return raw ? JSON.parse(raw) : null;
   }
 
   isLoggedIn(): boolean {
