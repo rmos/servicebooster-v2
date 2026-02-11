@@ -2,7 +2,9 @@
   "name": "@servicebooster-mfe/source",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "dev:legacy:static": "serve -l 4300 apps/angular/legacy-static/dist"
+  },
   "private": true,
   "devDependencies": {
     "@analogjs/vite-plugin-angular": "~2.1.2",
