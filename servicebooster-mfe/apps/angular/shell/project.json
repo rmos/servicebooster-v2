@@ -40,7 +40,9 @@
               "maximumError": "8kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "baseHref": "/v2/",
+          "deployUrl": "/v2/"
         },
         "development": {
           "buildOptimizer": false,

@@ -43,7 +43,9 @@
           "outputHashing": "all",
           "customWebpackConfig": {
             "path": "apps/angular/ireland/webpack.prod.config.ts"
-          }
+          },
+          "baseHref": "/v2/",
+          "deployUrl": "/v2/"
         },
         "development": {
           "buildOptimizer": false,
