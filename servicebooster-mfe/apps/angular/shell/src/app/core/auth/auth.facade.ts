@@ -18,14 +18,26 @@ export class AuthFacade {
   }
 
   setSession(resp: LoginResponse) {
-    localStorage.setItem(LS_TOKEN, resp.token);
-    localStorage.setItem(LS_CREDENTIAL, resp.credential);
-    this.hydrateFromToken(resp.token);
+    if (resp?.token) {
+      localStorage.setItem(LS_TOKEN, resp.token);
+      this.hydrateFromToken(resp.token);
+    }
+    if (resp?.credential) {
+      localStorage.setItem(LS_CREDENTIAL, resp.credential);
+    }
   }
 
   logout() {
     localStorage.removeItem(LS_TOKEN);
     localStorage.removeItem(LS_CREDENTIAL);
+  
+    sessionStorage.removeItem('ngStorage-jwt');
+    sessionStorage.removeItem('ngStorage-credential');
+    sessionStorage.removeItem('ngStorage-env');
+    sessionStorage.removeItem('jwt');
+    sessionStorage.removeItem('credential');
+    sessionStorage.removeItem('env');
+  
     this.userSubject.next(null);
   }
 

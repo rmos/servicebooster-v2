@@ -21,6 +21,6 @@ export function installSessionBridge(auth: AuthFacade) {
 
   (window as any).__SB_SESSION__ = bridge;
 
-  // cuando cambie user$, avisamos a los remotes
+  // notificar a remotes ante cambio de user$
   auth.user$.subscribe(() => notify());
 }

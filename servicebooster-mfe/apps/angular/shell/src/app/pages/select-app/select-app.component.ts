@@ -23,10 +23,12 @@ export class SelectAppComponent {
   }
 
   open(route: string) {
+    alert('OPEN ' + route);
     this.router.navigateByUrl(route);
   }
 
   openLegacy() {
+    alert('OPEN LEGACY');
     const token = this.auth.getToken();
     const credential = this.auth.getCredential();
 

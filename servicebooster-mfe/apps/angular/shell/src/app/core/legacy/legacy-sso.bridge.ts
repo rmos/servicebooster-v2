@@ -7,7 +7,7 @@ export function setLegacySession(opts: {
 }) {
   const { token, credential, env } = opts;
 
-  // ngStorage (lo que realmente acaba usando $sessionStorage)
+  // ngStorage (acaba usando $sessionStorage)
   sessionStorage.setItem('ngStorage-jwt', JSON.stringify(token));
   sessionStorage.setItem('ngStorage-credential', JSON.stringify(credential));
   if (env) sessionStorage.setItem('ngStorage-env', JSON.stringify(env));

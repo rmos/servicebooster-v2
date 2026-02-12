@@ -5,5 +5,5 @@ export interface ShellSessionBridge {
   getUser(): SessionUser | null;
   isLoggedIn(): boolean;
   has(permission: string): boolean;
-  subscribe(cb: () => void): () => void; // devuelve unsubscribe
+  subscribe(cb: () => void): () => void;
 }
