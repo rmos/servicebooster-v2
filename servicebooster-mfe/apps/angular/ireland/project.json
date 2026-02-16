@@ -44,8 +44,8 @@
           "customWebpackConfig": {
             "path": "apps/angular/ireland/webpack.prod.config.ts"
           },
-          "baseHref": "/v2/",
-          "deployUrl": "/v2/"
+          "baseHref": "/v2/ireland/",
+          "deployUrl": "/v2/ireland/"
         },
         "development": {
           "buildOptimizer": false,
