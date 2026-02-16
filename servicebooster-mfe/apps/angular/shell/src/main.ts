@@ -40,7 +40,7 @@ fetch(manifestUrl, { cache: 'no-store' })
     return res.json();
   })
   .then((remotes: Record<string, string>) =>
-    Object.entries(remotes).map(([name, entry]) => ({ name, entry }))
+    Object.entries(remotes).map(([name, entry]) => ({ name, entry, type: 'module' }))
   )
   .then((remotes) => registerRemotes(remotes))
   .then(() => {
