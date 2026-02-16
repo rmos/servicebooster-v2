@@ -1,5 +1,7 @@
 # 📦 Service Booster V2 – Contrato de Publicación (Microfrontends)
 
+---
+
 ## 1️⃣ Arquitectura general
 
 La solución V2 está compuesta por contenedores independientes:
@@ -18,27 +20,56 @@ El enrutado se realiza por path bajo el mismo dominio.
 
 Dominio base:
 
+```
 https://spade.bankinter.bk
+```
 
 ## Shell
+
 Ruta:
+
+```
 /v2/
+```
+
 Ejemplo:
+
+```
 https://spade.bankinter.bk/v2/?mf=all
+```
+
 ---
 
 ## Remote Ireland
+
 Ruta:
+
+```
 /v2/ireland/
-Archivo critico:
+```
+
+Archivo crítico:
+
+```
 /v2/ireland/remoteEntry.mjs
+```
+
 ---
 
 ## Remote Portugal
+
 Ruta:
+
+```
 /v2/portugal/
+```
+
 Archivo crítico:
+
+```
 /v2/portugal/remoteEntry.mjs
+```
+
 ---
 
 # 🔁 3️⃣ Reglas de Reverse Proxy / Ingress
@@ -47,7 +78,7 @@ Archivo crítico:
 
 Las rutas deben preservarse completas.
 
-## Reglas necesarias:
+## Reglas necesarias
 
 | Path | Backend |
 |------|---------|
@@ -55,7 +86,8 @@ Las rutas deben preservarse completas.
 | /v2/ireland/ | Servicio Ireland |
 | /v2/portugal/ | Servicio Portugal |
 
-No debe hacerse:
+### No debe hacerse:
+
 - Rewrite de `/v2/ireland` → `/`
 - Strip prefix
 - Modificación de rutas internas
@@ -67,17 +99,33 @@ La aplicación está construida con `baseHref` y `deployUrl` explícitos.
 # 🧪 4️⃣ Validaciones obligatorias tras despliegue
 
 ## Shell
+
+```
 GET /v2/ → 200
+```
+
 ## Ireland
+
+```
 GET /v2/ireland/remoteEntry.mjs → 200
+```
+
 ## Portugal
+
+```
 GET /v2/portugal/remoteEntry.mjs → 200
+```
+
 ---
 
 # 🧠 5️⃣ Funcionamiento interno (Module Federation)
 
-El Shell carga dinámicamente los remotes mediante:
+El Shell carga dinámicamente los remotes mediante el siguiente manifest:
+
+```
 /v2/assets/module-federation.manifest.prod.json
+```
+
 Contenido esperado:
 
 ```json
@@ -85,18 +133,81 @@ Contenido esperado:
   "ireland": "/v2/ireland/remoteEntry.mjs",
   "portugal": "/v2/portugal/remoteEntry.mjs"
 }
-✅ 10️⃣ Resultado esperado
+```
+
+Si las rutas cambian en infraestructura, deberá actualizarse este manifest.
+
 ---
+
+# 🔄 6️⃣ Independencia de despliegue
+
+| Cambio | Requiere redeploy |
+|--------|------------------|
+| Solo Ireland | Solo contenedor Ireland |
+| Solo Portugal | Solo contenedor Portugal |
+| Solo Shell | Solo contenedor Shell |
+
+No es necesario reconstruir el resto.
+
+---
+
+# 📦 7️⃣ Versionado recomendado
+
+```
+sb-shell:2.0.0
+mf-ireland:2.0.5
+mf-portugal:2.0.3
+```
+
+El despliegue debe permitir actualizar versiones individualmente.
+
+---
+
+# 🧩 8️⃣ Configuración SPA (Fallback obligatorio)
+
+Cada servicio debe incluir fallback SPA:
+
+Ejemplo nginx:
+
+```nginx
+try_files $uri $uri/ /v2/index.html;
+```
+
+(o equivalente según subruta)
+
+---
+
+# 🔐 9️⃣ CORS
+
+No se requieren configuraciones CORS adicionales al estar bajo el mismo dominio.
+
+---
+
+# ✅ 10️⃣ Resultado esperado
+
+Accediendo a:
+
+```
+https://spade.bankinter.bk/v2/?mf=all
+```
+
+Debe:
+
+- Cargar el Shell
+- Cargar Ireland y Portugal dinámicamente
+- No producir errores 404
+- No intentar acceder a localhost
+- Permitir despliegue independiente de cada microfrontend
 
 ---
 
 # 🧭 Diagrama de Arquitectura
 
-## Opción 1 – Diagrama simple (ASCII)
+## Vista Simplificada (ASCII)
 
-```md
+```
                         ┌─────────────────────────────┐
-                        │  https://spade.bankinter.bk │
+                        │  spade.bankinter.bk         │
                         └───────────────┬─────────────┘
                                         │
                                 Reverse Proxy / Ingress
@@ -109,4 +220,32 @@ Contenido esperado:
         │                               │                               │
    index.html                      remoteEntry.mjs                remoteEntry.mjs
         │
-   Carga dinámica de remotes
+   Carga dinámica de remotes vía Module Federation
+```
+
+---
+
+## Diagrama Mermaid (si la plataforma lo soporta)
+
+```mermaid
+flowchart TD
+    A[Browser<br>spade.bankinter.bk/v2] --> B[Reverse Proxy / Ingress]
+
+    B -->|/v2/| C[Shell Container]
+    B -->|/v2/ireland/| D[Ireland Container]
+    B -->|/v2/portugal/| E[Portugal Container]
+
+    C -->|Loads remoteEntry| D
+    C -->|Loads remoteEntry| E
+```
+
+---
+
+# 🏁 Conclusión
+
+La arquitectura permite:
+
+- Despliegues independientes por microfrontend
+- Escalado independiente
+- Evolución progresiva sin impactar al legacy
+- Separación clara entre infraestructura y aplicación
