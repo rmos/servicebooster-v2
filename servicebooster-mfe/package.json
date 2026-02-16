@@ -63,11 +63,6 @@
     "@angular/router": "~21.1.0",
     "rxjs": "~7.8.0",
     "@nx/angular": "22.4.5"
-  },
-  "pnpm": {
-    "patchedDependencies": {
-      "nx@22.4.5": "patches/nx@22.4.5.patch"
-    }
   }
 
 }

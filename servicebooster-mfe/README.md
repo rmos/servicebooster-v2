@@ -1,77 +1,251 @@
-# ServiceboosterMfe
+# 📦 Service Booster V2 – Contrato de Publicación (Microfrontends)
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+---
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is almost ready ✨.
+## 1️⃣ Arquitectura general
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+La solución V2 está compuesta por contenedores independientes:
 
-## Finish your remote caching setup
+- Shell
+- Remote Ireland
+- Remote Portugal
 
-[Click here to finish setting up your workspace!](https://cloud.nx.app/connect/IxEYUZmPky)
+Cada uno se publica como imagen Docker independiente y puede desplegarse sin afectar al resto.
 
+El enrutado se realiza por path bajo el mismo dominio.
 
-## Run tasks
+---
 
-To run tasks with Nx use:
+# 🌐 2️⃣ Rutas oficiales en Producción
 
-```sh
-npx nx <target> <project-name>
+Dominio base:
+
+```
+https://spade.bankinter.bk
 ```
 
-For example:
+## Shell
 
-```sh
-npx nx build myproject
+Ruta:
+
+```
+/v2/
 ```
 
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
+Ejemplo:
 
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-To install a new plugin you can use the `nx add` command. Here's an example of adding the React plugin:
-```sh
-npx nx add @nx/react
+```
+https://spade.bankinter.bk/v2/?mf=all
 ```
 
-Use the plugin's generator to create new projects. For example, to create a new React app or library:
+---
 
-```sh
-# Generate an app
-npx nx g @nx/react:app demo
+## Remote Ireland
 
-# Generate a library
-npx nx g @nx/react:lib some-lib
+Ruta:
+
+```
+/v2/ireland/
 ```
 
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
+Archivo crítico:
 
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+```
+/v2/ireland/remoteEntry.mjs
+```
 
+---
 
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+## Remote Portugal
 
-## Install Nx Console
+Ruta:
 
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
+```
+/v2/portugal/
+```
 
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+Archivo crítico:
 
-## Useful links
+```
+/v2/portugal/remoteEntry.mjs
+```
 
-Learn more:
+---
 
-- [Learn more about this workspace setup](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+# 🔁 3️⃣ Reglas de Reverse Proxy / Ingress
 
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+⚠ IMPORTANTE: No realizar reescritura (strip-prefix) de las rutas.
+
+Las rutas deben preservarse completas.
+
+## Reglas necesarias
+
+| Path | Backend |
+|------|---------|
+| /v2/ | Servicio Shell |
+| /v2/ireland/ | Servicio Ireland |
+| /v2/portugal/ | Servicio Portugal |
+
+### No debe hacerse:
+
+- Rewrite de `/v2/ireland` → `/`
+- Strip prefix
+- Modificación de rutas internas
+
+La aplicación está construida con `baseHref` y `deployUrl` explícitos.
+
+---
+
+# 🧪 4️⃣ Validaciones obligatorias tras despliegue
+
+## Shell
+
+```
+GET /v2/ → 200
+```
+
+## Ireland
+
+```
+GET /v2/ireland/remoteEntry.mjs → 200
+```
+
+## Portugal
+
+```
+GET /v2/portugal/remoteEntry.mjs → 200
+```
+
+---
+
+# 🧠 5️⃣ Funcionamiento interno (Module Federation)
+
+El Shell carga dinámicamente los remotes mediante el siguiente manifest:
+
+```
+/v2/assets/module-federation.manifest.prod.json
+```
+
+Contenido esperado:
+
+```json
+{
+  "ireland": "/v2/ireland/remoteEntry.mjs",
+  "portugal": "/v2/portugal/remoteEntry.mjs"
+}
+```
+
+Si las rutas cambian en infraestructura, deberá actualizarse este manifest.
+
+---
+
+# 🔄 6️⃣ Independencia de despliegue
+
+| Cambio | Requiere redeploy |
+|--------|------------------|
+| Solo Ireland | Solo contenedor Ireland |
+| Solo Portugal | Solo contenedor Portugal |
+| Solo Shell | Solo contenedor Shell |
+
+No es necesario reconstruir el resto.
+
+---
+
+# 📦 7️⃣ Versionado recomendado
+
+```
+sb-shell:2.0.0
+mf-ireland:2.0.5
+mf-portugal:2.0.3
+```
+
+El despliegue debe permitir actualizar versiones individualmente.
+
+---
+
+# 🧩 8️⃣ Configuración SPA (Fallback obligatorio)
+
+Cada servicio debe incluir fallback SPA:
+
+Ejemplo nginx:
+
+```nginx
+try_files $uri $uri/ /v2/index.html;
+```
+
+(o equivalente según subruta)
+
+---
+
+# 🔐 9️⃣ CORS
+
+No se requieren configuraciones CORS adicionales al estar bajo el mismo dominio.
+
+---
+
+# ✅ 10️⃣ Resultado esperado
+
+Accediendo a:
+
+```
+https://spade.bankinter.bk/v2/?mf=all
+```
+
+Debe:
+
+- Cargar el Shell
+- Cargar Ireland y Portugal dinámicamente
+- No producir errores 404
+- No intentar acceder a localhost
+- Permitir despliegue independiente de cada microfrontend
+
+---
+
+# 🧭 Diagrama de Arquitectura
+
+## Vista Simplificada (ASCII)
+
+```
+                        ┌─────────────────────────────┐
+                        │  spade.bankinter.bk         │
+                        └───────────────┬─────────────┘
+                                        │
+                                Reverse Proxy / Ingress
+                                        │
+        ┌───────────────────────────────┼───────────────────────────────┐
+        │                               │                               │
+   /v2/ (Shell)                 /v2/ireland/                    /v2/portugal/
+        │                               │                               │
+   sb-shell container            mf-ireland container            mf-portugal container
+        │                               │                               │
+   index.html                      remoteEntry.mjs                remoteEntry.mjs
+        │
+   Carga dinámica de remotes vía Module Federation
+```
+
+---
+
+## Diagrama Mermaid (si la plataforma lo soporta)
+
+```mermaid
+flowchart TD
+    A[Browser<br>spade.bankinter.bk/v2] --> B[Reverse Proxy / Ingress]
+
+    B -->|/v2/| C[Shell Container]
+    B -->|/v2/ireland/| D[Ireland Container]
+    B -->|/v2/portugal/| E[Portugal Container]
+
+    C -->|Loads remoteEntry| D
+    C -->|Loads remoteEntry| E
+```
+
+---
+
+# 🏁 Conclusión
+
+La arquitectura permite:
+
+- Despliegues independientes por microfrontend
+- Escalado independiente
+- Evolución progresiva sin impactar al legacy
+- Separación clara entre infraestructura y aplicación

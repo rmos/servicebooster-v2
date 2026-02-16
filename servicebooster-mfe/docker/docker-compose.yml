@@ -1,0 +1,27 @@
+services:
+  gateway:
+    image: nginx:alpine
+    container_name: service-booster-v2
+    ports:
+      - "8080:80"
+    volumes:
+      - ./gateway.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - shell
+      - ireland
+      - portugal
+
+  shell:
+    image: sb-shell:prod
+    expose:
+      - "80"
+
+  ireland:
+    image: mf-ireland:prod
+    expose:
+      - "80"
+
+  portugal:
+    image: mf-portugal:prod
+    expose:
+      - "80"

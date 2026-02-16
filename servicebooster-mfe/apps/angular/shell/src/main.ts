@@ -11,20 +11,20 @@ function isLocalHost(): boolean {
 type MfMode = 'none' | 'all' | 'ireland' | 'portugal' | 'legacy';
 
 function pickManifestFile(): string {
-  // 1) Modo MF por query (?mf=all|none|ireland|...)
-  const mf = (new URLSearchParams(window.location.search).get('mf') ?? 'all') as MfMode;
+  const qs = new URLSearchParams(window.location.search);
+  const mf = (qs.get('mf') ?? 'all') as MfMode;
 
-  // 2) Qué “familia” de manifest: dev(local) o prod(desplegado)
-  const flavor = isLocalHost() ? 'dev' : 'prod';
+  const forced = qs.get('mfEnv');
+  const flavor =
+    forced === 'dev' || forced === 'prod'
+      ? forced
+      : (isLocalHost() ? 'dev' : 'prod');
 
-  // 3) Elegimos archivo (tú puedes crear estos ficheros en /public)
-  //    - module-federation.manifest.dev.all.json
-  //    - module-federation.manifest.prod.all.json
-  //    - module-federation.manifest.dev.none.json (vacío)
-  //    - module-federation.manifest.prod.none.json (vacío)
-  //
-  // Si prefieres 1 solo por flavor (all) y controlar none desde código, también vale.
-  return `module-federation.manifest.${flavor}.${mf}.json`;
+  if (flavor === 'prod') {
+    return `module-federation.manifest.prod.json`;
+  }
+
+  return `module-federation.manifest.dev.${mf}.json`;
 }
 
 const manifestFile = pickManifestFile();
