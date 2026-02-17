@@ -1,0 +1,2 @@
+allow-unused-patches=true
+ignore-patch-failures=true

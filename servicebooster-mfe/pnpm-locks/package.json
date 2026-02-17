@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "dev:legacy:static": "serve -s -l 4300 apps/angular/legacy-static/dist",
-    "dev:all": "concurrently -n api,legacy,shell,ireland,portugal \"pnpm dev:legacy:static\" \"nx serve shell\" \"nx serve ireland\" \"nx serve Portugal\""
+    "dev:all": "concurrently -n api,legacy,shell,ireland,portugal \"node backend.js\" \"pnpm dev:legacy:static\" \"nx serve shell\" \"nx serve ireland\" \"nx serve Portugal\""
   },
   "private": true,
   "devDependencies": {
@@ -63,5 +63,11 @@
     "@angular/router": "~21.1.0",
     "rxjs": "~7.8.0",
     "@nx/angular": "22.4.5"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "nx@22.4.5": "patches/nx@22.4.5.patch"
+    }
   }
+
 }
