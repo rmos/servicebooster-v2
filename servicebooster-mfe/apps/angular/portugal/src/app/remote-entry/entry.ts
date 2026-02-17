@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { NxWelcome } from './nx-welcome';
+import { PackagesComponent } from '@servicebooster-mfe/ui-sb-packages';
 
 @Component({
-  imports: [NxWelcome],
-  selector: 'app-portugal-entry',
-  template: `<app-nx-welcome></app-nx-welcome>`,
+  standalone: true,
+  imports: [PackagesComponent],
+  template: `<lib-ui-sb-packages />`,
 })
-export class RemoteEntry {}
+export class PortugalEntryComponent {}

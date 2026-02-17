@@ -21,7 +21,10 @@
             "input": "apps/angular/shell/public"
           }
         ],
-        "styles": ["apps/angular/shell/src/styles.scss"],
+        "styles": [
+          "apps/angular/shell/src/styles.scss",
+          "primeicons/primeicons.css"
+        ],
         "customWebpackConfig": {
           "path": "apps/angular/shell/webpack.config.ts"
         }

@@ -1,8 +1,6 @@
 import { registerRemotes, loadRemote } from '@module-federation/enhanced/runtime';
 
 // --- Selección runtime del manifest ---
-// Regla: si estás en localhost -> manifest dev (puertos).
-// Si estás desplegado (cualquier otro host) -> manifest prod (/v2/...).
 function isLocalHost(): boolean {
   const h = window.location.hostname;
   return h === 'localhost' || h === '127.0.0.1' || h === '::1';
@@ -20,11 +18,15 @@ function pickManifestFile(): string {
       ? forced
       : (isLocalHost() ? 'dev' : 'prod');
 
-  if (flavor === 'prod') {
+  if (flavor === 'prod' && (isLocalHost())) {
     return `module-federation.manifest.prod.json`;
+  } else if (isLocalHost()) {
+    return `module-federation.manifest.dev.${mf}.json`;
   }
 
-  return `module-federation.manifest.dev.${mf}.json`;
+  return `module-federation.manifest.prod.json`;
+
+  
 }
 
 const manifestFile = pickManifestFile();

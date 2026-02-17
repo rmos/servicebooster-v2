@@ -1,0 +1,81 @@
+<div class="page">
+    <div class="header">
+    <div>
+        <h1>Packages</h1>
+        <div class="subtitle">Basic list (PrimeNG table + search + pagination)</div>
+    </div>
+
+    <div class="actions">
+        <button pButton type="button" label="Refresh" (click)="refresh()"></button>
+    </div>
+    </div>
+
+    <div class="filters">
+    <span class="p-input-icon-left">
+        <i class="pi pi-search"></i>
+        <input
+        pInputText
+        type="text"
+        [(ngModel)]="searchText"
+        placeholder="Search (name, version, country, status)"
+        aria-label="Search packages"
+        />
+    </span>
+
+    <button
+        pButton
+        type="button"
+        label="Clear"
+        class="p-button-text"
+        (click)="clear()"
+    ></button>
+    </div>
+
+    <p-table
+    [value]="filtered()"
+    [paginator]="true"
+    [rows]="10"
+    [rowsPerPageOptions]="[10, 20, 50]"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords}"
+    [responsiveLayout]="'scroll'"
+    >
+    <ng-template pTemplate="header">
+        <tr>
+        <th>Name</th>
+        <th>Version</th>
+        <th>Country</th>
+        <th>Status</th>
+        <th>Updated</th>
+        <th style="width: 1%; white-space: nowrap;">Actions</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-row>
+        <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.version }}</td>
+        <td>{{ row.country }}</td>
+        <td>
+            <p-tag [value]="row.status" [severity]="tagSeverity(row.status)"></p-tag>
+        </td>
+        <td>{{ row.updatedAt | date: 'yyyy-MM-dd HH:mm' }}</td>
+        <td style="white-space: nowrap;">
+            <button
+            pButton
+            type="button"
+            label="View"
+            class="p-button-sm p-button-text"
+            (click)="view(row)"
+            ></button>
+        </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+        <tr>
+        <td colspan="6">No packages found.</td>
+        </tr>
+    </ng-template>
+    </p-table>
+</div>
