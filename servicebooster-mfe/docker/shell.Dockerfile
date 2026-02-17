@@ -2,6 +2,14 @@
 FROM node:22-alpine AS build
 WORKDIR /repo
 
+ARG APP_NAME
+ARG VERSION
+ARG GIT_SHA
+
+LABEL org.opencontainers.image.title="${APP_NAME}"
+LABEL org.opencontainers.image.version="${VERSION}"
+LABEL org.opencontainers.image.revision="${GIT_SHA}"
+
 COPY . .
 RUN corepack enable
 ENV CI=true

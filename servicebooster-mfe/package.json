@@ -1,6 +1,6 @@
 {
   "name": "@servicebooster-mfe/source",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "scripts": {
     "dev:legacy:static": "serve -s -l 4300 apps/angular/legacy-static/dist",
