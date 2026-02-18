@@ -1,42 +1,35 @@
 import { Route } from '@angular/router';
 import { authGuard } from './core/auth/auth.guard';
 import { permissionGuard } from './core/auth/permission.guard';
-import { EnvironmentInjector, inject, runInInjectionContext } from '@angular/core';
 
 type RemoteName = 'legacy' | 'portugal' | 'ireland';
  
 function loadRemoteRoutes(remote: RemoteName) {
-  return () => {
+  return async () => {
     console.log('[ROUTER] trying remote', remote);
- 
-    const envInjector = inject(EnvironmentInjector);
- 
-    return runInInjectionContext(envInjector, async () => {
-      console.log('[ROUTER] in injection context for', remote);
- 
-      try {
-        const m = await (window as any).mfLoadRoutes(remote);
-        console.log('[ROUTER] remote module loaded for', remote, m);
- 
-        const routes = m?.remoteRoutes ?? m?.routes ?? m?.default;
-        console.log('[ROUTER] routes resolved for', remote, routes);
- 
-        if (!routes) throw new Error('No routes export');
-        return routes as Route[];
-      } catch (err) {
-        console.error('[ROUTER] Failed to load remote routes:', remote, err);
-        return [
-          {
-            path: '',
-            loadComponent: () =>
-              import('../../remote-unavailable/remote-unavailable.component').then(
-                (c) => c.RemoteUnavailableComponent
-              ),
-            data: { remote },
-          },
-        ] as Route[];
-      }
-    });
+
+    try {
+      const m = await (window as any).mfLoadRoutes(remote);
+      console.log('[ROUTER] remote module loaded for', remote, m);
+
+      const routes = m?.remoteRoutes ?? m?.routes ?? m?.default;
+      console.log('[ROUTER] routes resolved for', remote, routes);
+
+      if (!routes) throw new Error(`Remote ${remote} did not export routes`);
+      return routes as Route[];
+    } catch (err) {
+      console.error('[ROUTER] Failed to load remote routes:', remote, err);
+      return [
+        {
+          path: '',
+          loadComponent: () =>
+            import('../../remote-unavailable/remote-unavailable.component').then(
+              (c) => c.RemoteUnavailableComponent
+            ),
+          data: { remote },
+        },
+      ] as Route[];
+    }
   };
 }
 
