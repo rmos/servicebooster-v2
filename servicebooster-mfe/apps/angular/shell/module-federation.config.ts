@@ -2,7 +2,7 @@ import { ModuleFederationConfig } from '@nx/module-federation';
 
 const config: ModuleFederationConfig = {
   name: 'shell',
-  remotes: ['ireland', 'portugal', 'legacy'],
+  remotes: [],
 };
 
 export default config;

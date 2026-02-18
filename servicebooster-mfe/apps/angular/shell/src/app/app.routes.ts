@@ -1,5 +1,4 @@
 import { Route } from '@angular/router';
-import { loadRemote } from '@module-federation/enhanced/runtime';
 import { authGuard } from './core/auth/auth.guard';
 import { permissionGuard } from './core/auth/permission.guard';
 
@@ -7,8 +6,9 @@ type RemoteName = 'legacy' | 'portugal' | 'ireland';
 
 function loadRemoteRoutes(remote: RemoteName) {
   return () =>
-    loadRemote<any>(`${remote}/Routes`)
-      .then((m) => {
+    (window as any)
+      .mfLoadRoutes(remote)
+      .then((m: any) => {
         const routes = m?.remoteRoutes ?? m?.routes ?? m?.default;
         if (!routes) {
           throw new Error(
@@ -17,7 +17,7 @@ function loadRemoteRoutes(remote: RemoteName) {
         }
         return routes as Route[];
       })
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(`Failed to load remote routes: ${remote}`, err);
         return [
           {

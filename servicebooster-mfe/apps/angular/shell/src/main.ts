@@ -1,6 +1,5 @@
-import { registerRemotes, loadRemote } from '@module-federation/enhanced/runtime';
+import { createInstance } from '@module-federation/enhanced/runtime';
 
-// --- Selección runtime del manifest ---
 function isLocalHost(): boolean {
   const h = window.location.hostname;
   return h === 'localhost' || h === '127.0.0.1' || h === '::1';
@@ -14,44 +13,43 @@ function pickManifestFile(): string {
 
   const forced = qs.get('mfEnv');
   const flavor =
-    forced === 'dev' || forced === 'prod'
-      ? forced
-      : (isLocalHost() ? 'dev' : 'prod');
+    forced === 'dev' || forced === 'prod' ? forced : isLocalHost() ? 'dev' : 'prod';
 
-  if (flavor === 'prod' && (isLocalHost())) {
-    return `module-federation.manifest.prod.json`;
-  } else if (isLocalHost()) {
-    return `module-federation.manifest.dev.${mf}.json`;
-  }
-
-  return `module-federation.manifest.prod.json`;
-
-  
+  if (flavor === 'prod') return `module-federation.manifest.prod.json`;
+  return `module-federation.manifest.dev.${mf}.json`;
 }
 
 const manifestFile = pickManifestFile();
-
-// IMPORTANTE: relativo (./) para que en prod bajo /v2/ pida /v2/<manifest>
 const manifestUrl = new URL(`./${manifestFile}`, window.location.href).toString();
 
+const mf = createInstance({ name: 'shell', remotes: [] as any[] });
+
 fetch(manifestUrl, { cache: 'no-store' })
-  .then((res) => {
+  .then(async (res) => {
     if (!res.ok) {
       throw new Error(`Failed to fetch MF manifest (${res.status}) from ${manifestUrl}`);
     }
-    return res.json();
+    return (await res.json()) as Record<string, string>;
   })
-  .then((remotes: Record<string, string>) =>
+  .then((remotes) =>
     Object.entries(remotes).map(([name, entry]) => ({ name, entry, type: 'module' }))
   )
-  .then((remotes) => registerRemotes(remotes))
+  .then((remotes) => (mf as any).registerRemotes(remotes))
   .then(() => {
-    // Solo para debug manual en consola (opcional)
-    (window as any).loadRemote = loadRemote;
+    // ÚNICA API permitida para rutas: remoteName + exposedModule
+    (window as any).mfLoadRoutes = (remoteName: string) =>
+      (mf as any).loadRemote({ remoteName, exposedModule: './Routes' });
+
+    // opcional: exponer instancia para debug
+    (window as any).mf = mf;
   })
-  .then(() => import('./bootstrap').catch((err) => console.error(err)))
+  .then(() => import('./bootstrap'))
   .catch((err) => {
-    // Si falla el manifest, arranca el shell igualmente (sin remotes)
-    console.error('MF bootstrap failed, continuing without remotes', err);
+    console.error('MF init failed, starting shell without remotes', err);
+
+    // Aun si MF falla, el shell arranca
+    (window as any).mfLoadRoutes = () =>
+      Promise.reject(new Error('MF runtime not initialized'));
+
     import('./bootstrap').catch((e) => console.error(e));
   });
