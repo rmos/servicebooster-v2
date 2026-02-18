@@ -1,21 +1,23 @@
 import { withModuleFederation } from '@nx/module-federation/angular';
 import mfConfig from './module-federation.config';
 
-const SHARED_POLICY: any = {
-  '@angular/core': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-  '@angular/common': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-  '@angular/common/http': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-  '@angular/router': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+const NG = '21.1.4';
 
-  '@angular/platform-browser': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-  '@angular/platform-browser/animations': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-  '@angular/animations': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+export const SHARED_POLICY: any = {
+  '@angular/core': { singleton: true, strictVersion: true, requiredVersion: NG},
+  '@angular/common': { singleton: true, strictVersion: true, requiredVersion: NG},
+  '@angular/common/http': { singleton: true, strictVersion: true, requiredVersion: NG},
+  '@angular/router': { singleton: true, strictVersion: true, requiredVersion: NG},
 
-  rxjs: { singleton: true, strictVersion: true, requiredVersion: 'auto' },
-  'zone.js': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+  '@angular/platform-browser': { singleton: true, strictVersion: true, requiredVersion: NG},
+  '@angular/platform-browser/animations': { singleton: true, strictVersion: true, requiredVersion: NG},
+  '@angular/animations': { singleton: true, strictVersion: true, requiredVersion: NG},
+
+  rxjs: { singleton: true, strictVersion: true, requiredVersion: false },
+  'zone.js': { singleton: true, strictVersion: true, requiredVersion: false },
 };
 
-function patchShared(cfg: any) {
+export function patchShared(cfg: any) {
   const plugins = cfg?.plugins ?? [];
   const mfPlugin = plugins.find((p: any) => p?.constructor?.name === 'ModuleFederationPlugin');
   const opts = mfPlugin?._options ?? mfPlugin?.options;
@@ -24,10 +26,11 @@ function patchShared(cfg: any) {
   }
 }
 
-export default function (config: any, context: any) {
-  const mfWebpack = withModuleFederation(mfConfig, { dts: false }) as any;
-  config.plugins = [...(config.plugins ?? []), ...(mfWebpack.plugins ?? [])];
+export default async function (config: any) {
+  const mf = await withModuleFederation(mfConfig, { dts: false });
+  const cfg = mf(config);
 
-  patchShared(config);
-  return config;
+  patchShared(cfg);
+
+  return cfg;
 }
