@@ -1,24 +1,30 @@
 import { Route } from '@angular/router';
 import { authGuard } from './core/auth/auth.guard';
 import { permissionGuard } from './core/auth/permission.guard';
+import { EnvironmentInjector, inject, runInInjectionContext } from '@angular/core';
 
 type RemoteName = 'legacy' | 'portugal' | 'ireland';
-
+ 
 function loadRemoteRoutes(remote: RemoteName) {
-  return () =>
-    (window as any)
-      .mfLoadRoutes(remote)
-      .then((m: any) => {
+  return () => {
+    console.log('[ROUTER] trying remote', remote);
+ 
+    const envInjector = inject(EnvironmentInjector);
+ 
+    return runInInjectionContext(envInjector, async () => {
+      console.log('[ROUTER] in injection context for', remote);
+ 
+      try {
+        const m = await (window as any).mfLoadRoutes(remote);
+        console.log('[ROUTER] remote module loaded for', remote, m);
+ 
         const routes = m?.remoteRoutes ?? m?.routes ?? m?.default;
-        if (!routes) {
-          throw new Error(
-            `Remote ${remote} loaded but did not export routes (remoteRoutes/routes/default)`
-          );
-        }
+        console.log('[ROUTER] routes resolved for', remote, routes);
+ 
+        if (!routes) throw new Error('No routes export');
         return routes as Route[];
-      })
-      .catch((err: any) => {
-        console.error(`Failed to load remote routes: ${remote}`, err);
+      } catch (err) {
+        console.error('[ROUTER] Failed to load remote routes:', remote, err);
         return [
           {
             path: '',
@@ -29,7 +35,9 @@ function loadRemoteRoutes(remote: RemoteName) {
             data: { remote },
           },
         ] as Route[];
-      });
+      }
+    });
+  };
 }
 
 export const appRoutes: Route[] = [
@@ -66,7 +74,7 @@ export const appRoutes: Route[] = [
       {
         path: 'portugal',
         // TODO: cambia esto al permiso real, por ejemplo 'ACCESS-PRE'
-        canMatch: [permissionGuard('ACCESS-NULL')],
+        canMatch: [permissionGuard('ACCESS-AMBAR')],
         loadChildren: loadRemoteRoutes('portugal'),
       },
       {

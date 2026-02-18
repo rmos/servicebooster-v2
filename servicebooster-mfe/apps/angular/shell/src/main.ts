@@ -36,9 +36,9 @@ fetch(manifestUrl, { cache: 'no-store' })
   )
   .then((remotes) => (mf as any).registerRemotes(remotes))
   .then(() => {
-    // ÚNICA API permitida para rutas: remoteName + exposedModule
+
     (window as any).mfLoadRoutes = (remoteName: string) =>
-      (mf as any).loadRemote({ remoteName, exposedModule: './Routes' });
+      (mf as any).loadRemote(`${remoteName}/Routes`);
 
     // opcional: exponer instancia para debug
     (window as any).mf = mf;
