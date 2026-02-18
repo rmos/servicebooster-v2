@@ -5,6 +5,7 @@ import { AuthFacade } from './core/auth/auth.facade';
 
 @Component({
   imports: [NxWelcome, RouterModule],
+  standalone: true,
   selector: 'app-root',
   templateUrl: './app.html',
   styleUrl: './app.scss',
