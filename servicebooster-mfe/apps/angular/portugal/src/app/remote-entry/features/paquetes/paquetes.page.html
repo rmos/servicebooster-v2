@@ -1,0 +1,27 @@
+<section class="paquetes-container">
+
+  <header class="paquetes-header">
+    <h2>{{ title }}</h2>
+
+    <div class="acciones">
+      <input
+        type="text"
+        placeholder="🔍 Buscar…"
+        class="buscador"
+        (input)="setFiltro($event.target.value)" />
+
+      <button class="btn" (click)="refrescar()">⟳ Refrescar</button>
+      <button class="btn primario" (click)="crear()">＋ Nuevo paquete</button>
+    </div>
+  </header>
+
+  <div class="tabla-paquetes">
+    <lib-ui-ag-grid
+      [height]="500"
+      [columnDefs]="columns"
+      [rowData]="rows()"
+      [quickFilter]="filtro()">
+    </lib-ui-ag-grid>
+  </div>
+
+</section>

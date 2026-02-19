@@ -30,7 +30,7 @@ function pickManifestFile(): string {
 const manifestFile = pickManifestFile();
 
 // IMPORTANTE: relativo (./) para que en prod bajo /v2/ pida /v2/<manifest>
-const manifestUrl = new URL(`./${manifestFile}`, window.location.href).toString();
+const manifestUrl = new URL(`./${manifestFile}`, window.location.origin).toString();
 
 fetch(manifestUrl, { cache: 'no-store' })
   .then((res) => {

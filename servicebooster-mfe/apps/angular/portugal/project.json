@@ -54,6 +54,7 @@
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true
+
         }
       },
       "defaultConfiguration": "production"
@@ -63,7 +64,7 @@
       "executor": "@nx/angular:dev-server",
       "options": {
         "port": 4202,
-        "publicHost": "http://localhost:4202"
+        "publicHost": "http://localhost:4202/"
       },
       "configurations": {
         "production": {

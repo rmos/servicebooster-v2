@@ -1,0 +1,14 @@
+<div style="width:100%;">
+  <ag-grid-angular
+    style="width:100%;"
+    [style.height.px]="height"
+    [theme]="theme"
+    [gridOptions]="gridOptions"
+    [columnDefs]="columnDefs"
+    [rowData]="rowData"
+    [rowSelection]="rowSelection"
+    (gridReady)="onGridReady($event)">
+  </ag-grid-angular>
+</div>
+
+

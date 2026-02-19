@@ -1,0 +1,63 @@
+.paquetes-container {
+  padding: 1.5rem 2rem;
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.paquetes-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+
+  h2 {
+    margin: 0;
+    font-size: 1.6rem;
+  }
+
+  .acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .buscador {
+    padding: 6px 12px;
+    font-size: 14px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    min-width: 200px;
+  }
+
+  .btn {
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    background: white;
+
+    &:hover { background: #f3f3f3; }
+
+    &.primario {
+      background: #0067c2;
+      border-color: #005aab;
+      color: white;
+
+      &:hover { background: #005fb2; }
+    }
+  }
+}
+
+.tabla-paquetes {
+  width: 100%;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  overflow: hidden;
+}

@@ -66,7 +66,7 @@ export const appRoutes: Route[] = [
       {
         path: 'portugal',
         // TODO: cambia esto al permiso real, por ejemplo 'ACCESS-PRE'
-        canMatch: [permissionGuard('ACCESS-NULL')],
+        canMatch: [permissionGuard('ACCESS-AMBAR')],
         loadChildren: loadRemoteRoutes('portugal'),
       },
       {
