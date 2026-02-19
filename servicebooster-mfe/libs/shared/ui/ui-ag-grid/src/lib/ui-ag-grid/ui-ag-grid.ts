@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
@@ -31,6 +31,8 @@ export class UiAgGrid {
 
   /* Quick filter text */
   @Input() quickFilter = '';
+
+  @Output() sortChangedEvent = new EventEmitter<any>();
 
   /* AG Grid core */
   gridApi!: GridApi;
@@ -66,4 +68,19 @@ export class UiAgGrid {
       this.gridApi.sizeColumnsToFit();
     }
   }
+
+  onSortChanged() {
+    if (!this.gridApi) return;
+
+    const sortModel = this.gridApi.getColumnState()
+      .filter(col => col.sort != null)
+      .map(col => ({
+        colId: col.colId,
+        sort: col.sort,
+        sortIndex: col.sortIndex
+      }));
+
+    this.sortChangedEvent.emit(sortModel);
+  }
+  
 }

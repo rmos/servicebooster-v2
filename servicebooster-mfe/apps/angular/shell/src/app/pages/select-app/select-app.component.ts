@@ -17,23 +17,20 @@ export class SelectAppComponent {
   constructor(public auth: AuthFacade, private router: Router) {}
 
   get apps() {
-    const u = (this as any).auth['userSubject']?.value; // si prefieres, expón un getter en facade
+    const u = (this as any).auth['userSubject']?.value;
     const permissions = u?.permissions ?? [];
     return ALL_MFE_APPS.filter((a) => permissions.includes(a.permission));
   }
 
   open(route: string) {
-    alert('OPEN ' + route);
     this.router.navigateByUrl(route);
   }
 
   openLegacy() {
-    alert('OPEN LEGACY');
     const token = this.auth.getToken();
     const credential = this.auth.getCredential();
 
     if (!token || !credential) {
-      // si quieres, redirige a login o muestra mensaje
       return;
     }
 

@@ -7,7 +7,8 @@
     [columnDefs]="columnDefs"
     [rowData]="rowData"
     [rowSelection]="rowSelection"
-    (gridReady)="onGridReady($event)">
+    (gridReady)="onGridReady($event)"
+    (sortChanged)="onSortChanged()">
   </ag-grid-angular>
 </div>
 

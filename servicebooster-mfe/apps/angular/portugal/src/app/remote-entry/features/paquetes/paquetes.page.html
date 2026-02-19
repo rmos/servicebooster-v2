@@ -6,15 +6,16 @@
     <div class="acciones">
       <input
         type="text"
-        placeholder="🔍 Buscar…"
         class="buscador"
-        (input)="setFiltro($event.target.value)" />
+        placeholder="🔍 Buscar por nombre"
+        (input)="onFiltro($event.target.value)">
 
-      <button class="btn" (click)="refrescar()">⟳ Refrescar</button>
+      <button class="btn" (click)="svc.cargar()">⟳ Refrescar</button>
       <button class="btn primario" (click)="crear()">＋ Nuevo paquete</button>
     </div>
   </header>
 
+  <!-- GRID -->
   <div class="tabla-paquetes">
     <lib-ui-ag-grid
       [height]="500"
@@ -22,6 +23,21 @@
       [rowData]="rows()"
       [quickFilter]="filtro()">
     </lib-ui-ag-grid>
+  </div>
+
+  <!-- PAGINACIÓN REAL -->
+  <div class="paginacion">
+    <button (click)="prev()" [disabled]="pageIndex() === 0">Anterior</button>
+
+    <span>
+      Página {{ pageIndex() + 1 }}
+      de {{ Math.ceil(total() / pageSize()) }}
+    </span>
+
+    <button (click)="next()"
+      [disabled]="(pageIndex() + 1) >= Math.ceil(total() / pageSize())">
+      Siguiente
+    </button>
   </div>
 
 </section>
