@@ -15,7 +15,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   if (req.url.endsWith('.json') && req.url.includes('/assets/')) return next(req);
 
   const headers: Record<string, string> = {
-    Authorization: `Bearer ${token}`,
+    //Authorization: `Bearer ${token}`,
+    'X-Auth-Token': token
   };
 
   if (credential) {

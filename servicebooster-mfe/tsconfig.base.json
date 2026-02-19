@@ -25,9 +25,8 @@
         "apps/angular/legacy/src/app/remote-entry/entry.routes.ts"
       ],
       "@shared/shared-auth": ["libs/shared/shared-auth/src/index.ts"],
-      "@shared/ui-packages": ["libs/shared/ui-packages/src/index.ts"],
-      "@servicebooster-mfe/ui-sb-packages": [
-        "libs/shared/ui-sb-packages/src/index.ts"
+      "@servicebooster-mfe/ui-ag-grid": [
+        "libs/shared/ui/ui-ag-grid/src/index.ts"
       ]
     }
   },

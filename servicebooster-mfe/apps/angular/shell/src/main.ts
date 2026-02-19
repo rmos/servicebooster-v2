@@ -20,7 +20,9 @@ function pickManifestFile(): string {
 }
 
 const manifestFile = pickManifestFile();
-const manifestUrl = new URL(`./${manifestFile}`, window.location.href).toString();
+
+// IMPORTANTE: relativo (./) para que en prod bajo /v2/ pida /v2/<manifest>
+const manifestUrl = new URL(`./${manifestFile}`, window.location.origin).toString();
 
 const mf = createInstance({ name: 'shell', remotes: [] as any[] });
 
