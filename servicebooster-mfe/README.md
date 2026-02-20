@@ -16,7 +16,7 @@ El enrutado se realiza por path bajo el mismo dominio.
 
 ---
 
-# 🌐 2️⃣ Rutas oficiales en Producción
+# 2️⃣ Rutas oficiales en Producción
 
 Dominio base:
 
@@ -72,7 +72,7 @@ Archivo crítico:
 
 ---
 
-# 🔁 3️⃣ Reglas de Reverse Proxy / Ingress
+# 3️⃣ Reglas de Reverse Proxy / Ingress
 
 ⚠ IMPORTANTE: No realizar reescritura (strip-prefix) de las rutas.
 
@@ -96,7 +96,7 @@ La aplicación está construida con `baseHref` y `deployUrl` explícitos.
 
 ---
 
-# 🧪 4️⃣ Validaciones obligatorias tras despliegue
+# 4️⃣ Validaciones obligatorias tras despliegue
 
 ## Shell
 
@@ -118,7 +118,7 @@ GET /v2/portugal/remoteEntry.mjs → 200
 
 ---
 
-# 🧠 5️⃣ Funcionamiento interno (Module Federation)
+# 5️⃣ Funcionamiento interno (Module Federation)
 
 El Shell carga dinámicamente los remotes mediante el siguiente manifest:
 
@@ -139,7 +139,7 @@ Si las rutas cambian en infraestructura, deberá actualizarse este manifest.
 
 ---
 
-# 🔄 6️⃣ Independencia de despliegue
+# 6️⃣ Independencia de despliegue
 
 | Cambio | Requiere redeploy |
 |--------|------------------|
@@ -151,7 +151,7 @@ No es necesario reconstruir el resto.
 
 ---
 
-# 📦 7️⃣ Versionado recomendado
+# 7️⃣ Versionado recomendado
 
 ```
 sb-shell:2.0.0
@@ -163,7 +163,7 @@ El despliegue debe permitir actualizar versiones individualmente.
 
 ---
 
-# 🧩 8️⃣ Configuración SPA (Fallback obligatorio)
+# 8️⃣ Configuración SPA (Fallback obligatorio)
 
 Cada servicio debe incluir fallback SPA:
 
@@ -183,7 +183,7 @@ No se requieren configuraciones CORS adicionales al estar bajo el mismo dominio.
 
 ---
 
-# ✅ 10️⃣ Resultado esperado
+# 10️⃣ Resultado esperado
 
 Accediendo a:
 
@@ -201,7 +201,7 @@ Debe:
 
 ---
 
-# 🧭 Diagrama de Arquitectura
+# Diagrama de Arquitectura
 
 ## Vista Simplificada (ASCII)
 
@@ -241,7 +241,7 @@ flowchart TD
 
 ---
 
-# 🏁 Conclusión
+# Conclusión
 
 La arquitectura permite:
 

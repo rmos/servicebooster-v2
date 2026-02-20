@@ -27,6 +27,9 @@
       "@shared/shared-auth": ["libs/shared/shared-auth/src/index.ts"],
       "@servicebooster-mfe/ui-ag-grid": [
         "libs/shared/ui/ui-ag-grid/src/index.ts"
+      ],
+      "@servicebooster-mfe/shared-utils": [
+        "libs/shared/utils-sb/src/index.ts"
       ]
     }
   },
