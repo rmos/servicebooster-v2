@@ -1,5 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { UiAgGridQuery, UiAgGridSort } from '@servicebooster-mfe/ui-ag-grid';
 
 @Injectable({ providedIn: 'root' })
 export class PaquetesService {
@@ -13,6 +14,7 @@ export class PaquetesService {
   limit = signal(10);
   offset = signal(0);
   nameFilter = signal('');
+  sorts = signal<UiAgGridSort[]>([]);
 
   constructor(private http: HttpClient) {}
 
@@ -41,22 +43,24 @@ export class PaquetesService {
       });
   }
 
-  // Cambiar página
-  siguiente() {
-    if (this.offset() + this.limit() < this.total())
-      this.offset.update(o => o + this.limit());
+  actualizarQuery(query: UiAgGridQuery) {
+    const nextOffset = query.pageIndex * query.pageSize;
+    const hasChanges =
+      this.limit() !== query.pageSize ||
+      this.offset() !== nextOffset ||
+      this.nameFilter() !== query.search ||
+      JSON.stringify(this.sorts()) !== JSON.stringify(query.sorts);
+
+    if (!hasChanges) return;
+
+    this.limit.set(query.pageSize);
+    this.offset.set(nextOffset);
+    this.nameFilter.set(query.search);
+    this.sorts.set(query.sorts);
     this.cargar();
   }
 
-  anterior() {
-    if (this.offset() > 0)
-      this.offset.update(o => o - this.limit());
-    this.cargar();
-  }
-
-  buscarPorNombre(nombre: string) {
-    this.nameFilter.set(nombre);
-    this.offset.set(0);
+  recargar() {
     this.cargar();
   }
 

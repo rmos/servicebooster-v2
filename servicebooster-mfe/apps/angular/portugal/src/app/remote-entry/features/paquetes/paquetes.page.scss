@@ -5,6 +5,9 @@
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
+  background:
+    radial-gradient(circle at top right, #e9f2ff 0%, transparent 38%),
+    linear-gradient(180deg, #f5f8fc 0%, #eef3f9 100%);
 }
 
 .paquetes-header {
@@ -17,6 +20,8 @@
   h2 {
     margin: 0;
     font-size: 1.6rem;
+    color: #102a4b;
+    letter-spacing: 0.01em;
   }
 
   .acciones {
@@ -26,23 +31,15 @@
     align-items: center;
   }
 
-  .buscador {
-    padding: 6px 12px;
-    font-size: 14px;
-    border: 1px solid #bbb;
-    border-radius: 4px;
-    min-width: 200px;
-  }
-
   .btn {
     padding: 6px 12px;
     font-size: 14px;
-    border-radius: 4px;
+    border-radius: 6px;
     cursor: pointer;
     border: 1px solid #ccc;
     background: white;
 
-    &:hover { background: #f3f3f3; }
+    &:hover { background: #f3f8ff; }
 
     &.primario {
       background: #0067c2;
@@ -57,7 +54,8 @@
 .tabla-paquetes {
   width: 100%;
   background: white;
-  border-radius: 6px;
-  border: 1px solid #ddd;
+  border-radius: 10px;
+  border: 1px solid #d9e3f2;
   overflow: hidden;
+  box-shadow: 0 8px 22px rgba(16, 42, 75, 0.07);
 }

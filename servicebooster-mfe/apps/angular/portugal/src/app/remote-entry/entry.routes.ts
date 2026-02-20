@@ -12,10 +12,10 @@ export const remoteRoutes: Route[] = [
         provideHttpClient(withInterceptors([mockInterceptor, authInterceptor])),
     ],
     children: [
-      // redirección por defecto
+      // redireccion por defecto
       { path: '', redirectTo: 'paquetes', pathMatch: 'full' },
 
-      // páginas del remoto
+      // subrutas del mfe de portugal
       {
         path: 'paquetes',
         loadComponent: () =>

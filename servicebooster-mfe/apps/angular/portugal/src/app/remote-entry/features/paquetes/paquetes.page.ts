@@ -1,9 +1,13 @@
-import { Component, signal, computed } from '@angular/core';
+import { Component, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ColDef, ICellRendererParams } from 'ag-grid-community';
-import { UiAgGrid} from '@servicebooster-mfe/ui-ag-grid';
+import {
+  UiAgGrid,
+  UiAgGridActionClick,
+  UiAgGridQuery,
+  UiAgGridRowAction,
+} from '@servicebooster-mfe/ui-ag-grid';
 import { PaquetesService } from './services/paquetes.service';
-import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -14,15 +18,11 @@ import { Router } from '@angular/router';
 export class PaquetesPage {
 
   title = 'Paquetes';
-  Math = Math; // permitir Math.* en template
-
-  filtro = signal('');
 
   constructor(
-    public svc: PaquetesService,
-    private router: Router
+    public svc: PaquetesService
   ) {
-    this.svc.cargar();
+    this.svc.recargar();
   }
 
   // Columnas AG Grid
@@ -67,26 +67,64 @@ export class PaquetesPage {
             </span>
         `;
       }
-    }
+    },
+  ];
+
+  rowActions: UiAgGridRowAction[] = [
+    {
+      id: 'deploy',
+      label: 'Desplegar',
+      icon: '🚀',
+      cssClass: 'sb-accent',
+      visible: (row) => row?.environmentStatus !== 'deployed',
+    },
+    {
+      id: 'promote',
+      label: 'Promocionar',
+      icon: '☁️⬆️',
+      enabled: (row) => row?.environmentStatus === 'deployed',
+    },
+    {
+      id: 'cancel',
+      label: 'Cancelar',
+      icon: '✖',
+      cssClass: 'sb-danger',
+      enabled: (row) => row?.environmentStatus !== 'deployed',
+    },
   ];
 
   // Datos de vista directamente desde el servicio
   rows = computed(() => this.svc.packages());
   total = computed(() => this.svc.total());
-  pageSize = computed(() => this.svc.limit());
-  pageIndex = computed(() => this.svc.offset() / this.svc.limit());
 
-  // Paginación UI
-  next() { this.svc.siguiente(); }
-  prev() { this.svc.anterior(); }
+  onGridQueryChange(query: UiAgGridQuery) {
+    this.svc.actualizarQuery(query);
+  }
 
-  // Quick filter real
-  onFiltro(v: string) {
-    this.filtro.set(v);
-    this.svc.buscarPorNombre(v);
+  onGridActionClick(event: UiAgGridActionClick) {
+    const rowId = event.row?.id;
+    if (!rowId) return;
+
+    switch (event.actionId) {
+      case 'deploy':
+        console.log('[PAQUETES] Deploy', rowId, event.row);
+        break;
+      case 'promote':
+        console.log('[PAQUETES] Promote', rowId, event.row);
+        break;
+      case 'cancel':
+        console.log('[PAQUETES] Cancel', rowId, event.row);
+        break;
+      default:
+        break;
+    }
   }
 
   crear() {
     console.log("Crear...")
+  }
+
+  refrescar() {
+    this.svc.recargar();
   }
 }

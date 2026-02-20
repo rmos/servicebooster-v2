@@ -1,15 +1,63 @@
-<div style="width:100%;">
+<div class="ui-ag-grid">
+  <div class="ui-ag-grid__controls" *ngIf="showSearch || showPageSizeSelector">
+    <input
+      *ngIf="showSearch"
+      class="ui-ag-grid__search"
+      type="text"
+      [placeholder]="searchPlaceholder"
+      [value]="currentQuery.search"
+      (input)="onSearchInput(($any($event.target).value ?? '').toString())"
+    />
+
+    <label class="ui-ag-grid__page-size" *ngIf="showPageSizeSelector">
+      <span>Filas</span>
+      <select
+        [value]="currentQuery.pageSize"
+        (change)="onPageSizeChange(+$any($event.target).value)"
+      >
+        <option *ngFor="let option of pageSizeOptions" [value]="option">
+          {{ option }}
+        </option>
+      </select>
+    </label>
+  </div>
+
   <ag-grid-angular
-    style="width:100%;"
+    class="ui-ag-grid__table"
     [style.height.px]="height"
     [theme]="theme"
     [gridOptions]="gridOptions"
-    [columnDefs]="columnDefs"
-    [rowData]="rowData"
+    [columnDefs]="resolvedColumnDefs"
+    [rowData]="renderedRows"
+    [defaultColDef]="defaultColDef"
     [rowSelection]="rowSelection"
+    [pagination]="mode === 'client'"
+    [paginationPageSize]="currentQuery.pageSize"
+    [paginationPageSizeSelector]="false"
+    [loading]="loading"
     (gridReady)="onGridReady($event)"
-    (sortChanged)="onSortChanged()">
+    (sortChanged)="onSortChanged()"
+    (cellClicked)="onCellClicked($event)"
+  >
   </ag-grid-angular>
+
+  <div class="ui-ag-grid__pagination" *ngIf="mode !== 'client'">
+    <button
+      type="button"
+      class="ui-ag-grid__pager-btn"
+      (click)="onPrevPage()"
+      [disabled]="currentQuery.pageIndex === 0"
+    >
+      Anterior
+    </button>
+    <span>Página {{ currentPage }} de {{ totalPages }}</span>
+    <button
+      type="button"
+      class="ui-ag-grid__pager-btn"
+      (click)="onNextPage()"
+      [disabled]="currentQuery.pageIndex + 1 >= totalPages"
+    >
+      Siguiente
+    </button>
+  </div>
 </div>
-
-
